@@ -1,11 +1,9 @@
 from django.http import HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, UpdateView
 
-from django.core import serializers
-from django.core.serializers import json
 import pickle
 from base64 import b64encode, b64decode
 
@@ -27,28 +25,9 @@ class SimpleListView(ListView):
         # Session key
         key = 'my_qs'
 
-        qs = Item.objects.filter(author__icontains='Pounce')
-        # qs = Item.objects.all()
-
-        # Send the query as a string, results in a SQL statement, not Djang ORM
-        # query_str = (str(qs.query))
-        # self.request.session[key] = query_str
-
-        # Using json serializer
-        # qs_json = serializers.serialize('json', qs)
-        # self.request.session[key] = qs_json
-        # print(qs_json)
-
-        # Using Pickle gives error: 'Object of type bytes is not JSON serializable'
-
-        # encoded = base64.b64encode(b'data to be encoded')  # b'ZGF0YSB0byBiZSBlbmNvZGVk' (notice the "b")
-        # data = encoded.decode('ascii')         
-# 
-        # self.request.session[key] = data  # pickle.dumps(qs.query)
-
+        qs = Item.objects.filter(author__icontains='Ezzie')
+    
         self.request.session[key] = b64encode(pickle.dumps(qs.query)).decode('ascii')
-
-        # self.request.session[key] = "Item.objects.filter(author__icontains='Ezzie')"
 
         return qs
 
@@ -131,44 +110,7 @@ class ItemUpdateView(UpdateView):
         # Session key
         key = 'my_qs'
 
-        # Using json serializer
-        # qs_json = self.request.session[key]
-        # print(qs_json)
-        # for qs in serializers.deserialize('json', qs_json):
-            # print(qs)
-
-        # qs_query = self.request.session[key]
-        
-        # item = qs
-        reloaded_qs = Item.objects.all()
-
-        # query_str = self.request.session[key]
-        # reloaded_query = Item.objects.raw('SELECT "listapp_item"."id", "listapp_item"."author", "listapp_item"."title", "listapp_item"."publish" FROM "listapp_item" WHERE "listapp_item"."author" LIKE %Ezzie% ESCAPE')
-
-        # query_bytes = bytes(query_str, 'utf-8')
-        # print('********')
-        # print(reloaded_qs)
-        # print(type(reloaded_qs))
-        # print('********')
-        # print(reloaded_qs.query)
-        # print(type(reloaded_qs.query))
-        # print('********')
-        # print(query_str)
-        # print(type(query_str))
-        # print('********')
-        # print(query_bytes)
-        # print(type(query_bytes))
-        # print('********')
-        # print(reloaded_query)
-        # print(type(reloaded_query))
-        # print('********')
-
-        # qs_query = self.request.session[key]
-        # print(qs_query)
-        # reloaded_qs.query = query_str
-
-        s = self.request.session[key]
-        query = pickle.loads(b64decode(s))  # Assuming 's' is the pickled string.
+        query = pickle.loads(b64decode(self.request.session[key]))
         qs = Item.objects.all()
         qs.query = query 
 
