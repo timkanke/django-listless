@@ -1,0 +1,59 @@
+{% extends "listapp/base.html" %}
+
+{% load django_tables2 %}
+{% load django_bootstrap5 %}
+{% load django_tables2 crispy_forms_tags %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>List View</h1>
+<div class="row">
+    <div class="col-md-2">
+
+        <div class="card p-3 mt-1">
+            <h3>Filters</h3>
+            <form method="GET" action=".">
+                <div class="mb-3">
+                    <label for="author" class="form-label">Author</label>
+                    <input type="icontains" class="form-control" id="author" name="author" aria-label="author">
+                </div>
+                <div class="mb-3">
+                    <label for="publish" class="form-label">Publish</label>
+                    <select class="form-select" name="publish" aria-label="publish">
+                        <option selected>---</option>
+                        <option value="1">True</option>
+                        <option value="2">False</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p-3 mt-1">
+            <h3>Item List</h3>
+            {% if item_list %}
+            <table>
+                <tr>
+                    <td><b>ID</b></td>
+                    <td><b>Author</b></td>
+                    <td><b>Title</b></td>
+                    <td><b>Publish</b></td>
+                </tr>
+                {% for items in item_list %}
+                <tr>
+                    <td><a href="{% url 'listapp:itemupdateview' items.id %}">{{ items.id }}</a></td>
+                    <td>{{ items.author }}</td>
+                    <td>{{ items.title }}</td>
+                    <td>{{ items.publish }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p>There are no items.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

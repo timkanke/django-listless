@@ -1,0 +1,175 @@
+{% extends "listapp/base.html" %}
+{% load crispy_forms_tags %}
+{% load django_bootstrap5 %}
+{% load django_tables2 crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid p-2">
+
+    <div class="row">
+        {% comment %}
+        <div class="col-md-4 mb-0">
+            <div class="card p-3 mt-3">
+                <h3>Filter</h3>
+                <h4>under construction</h4>
+
+                <form method="GET" action=".">
+                    <div class="mb-3">
+                        <label for="author" class="form-label">Author</label>
+                        <input type="icontains" class="form-control" id="author" name="author_contains"
+                            aria-label="author">
+                    </div>
+                    <div class="mb-3">
+                        <label for="publish" class="form-label">Publish</label>
+                        <select class="form-select" name="publish" aria-label="publish">
+                            <option selected>---</option>
+                            <option value="1">True</option>
+                            <option value="2">False</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+
+                {% if filter %}
+                <form action="" method="get" class="form form-inline">
+                    {% bootstrap_form filter.form layout='inline'|crispy %}
+                    {% bootstrap_button 'Filter' button_type="submit" button_class="btn-primary btn-sm" %}
+                    {% bootstrap_button 'Reset' button_type="reset" button_class="btn-outline-primary btn-sm" %}
+                </form>
+                {% endif %}
+
+                <div class="row pt-3">
+                    <a href="{% clean_url %}"><button class="btn btn-warning btn-sm">Clear Filters</button></a>
+                </div>
+
+            </div>
+        </div>
+        {% endcomment %}
+        <div class="col-md-4 mb-0">
+            <div class="card p-3 mt-3">
+                <h3>Navigation</h3>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    {% if previous_object_id %}
+                    <a href="{% url 'listapp:itemupdateview' previous_object_id %}">
+                        <button class="btn btn-outline-info btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-chevron-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                            </svg>
+                            Prev Item
+                    </a>
+                    {% else %}
+                    <button type="button" class="btn btn-secondary btn-sm" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-chevron-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                        </svg>
+                        Prev Item</button>
+                    {% endif %}
+
+                    {% if next_object_id %}
+                    <a href="{% url 'listapp:itemupdateview' next_object_id %}">
+                        <button class="btn btn-outline-info btn-sm">
+                            Next Item
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                    </a>
+                    {% else %}
+                    <button type="button" class="btn btn-secondary btn-sm" disabled>
+                        Next Item
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-chevron-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </button>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-0">
+            <div class="card p-3 mt-3">
+                <div class="d-grid gap-2">
+                    <h3>List</h3>
+                    {% if object_list %}
+                    {% for object in object_list %}
+                    {% if current_object_id == object.id %}
+                    <a href="">
+                        <button type="button" class="btn btn-success" disabled>
+                            <b>ID:</b> {{ object.id }} &nbsp;
+                            <b>Author:</b> {{ object.author }}&nbsp;
+                            <b>Publish:</b> {{ object.publish }}
+                        </button>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'listapp:itemupdateview' object.pk %}">
+                        <button class="btn btn-secondary">
+                            <b>ID:</b> {{ object.id }} &nbsp;
+                            <b>Author:</b> {{ object.author }}&nbsp;
+                            <b>Publish:</b> {{ object.publish }}
+                        </button>
+                    </a>
+                    {% endif %}
+
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 mb-0">
+            {% if object %}
+            <!-- ...display the object... (update section) -->
+            <form method="post" enctype="multipart/form-data" class="card p-3 mt-3">
+                {% csrf_token %}
+                {{ form.media}}
+
+                <h3>Form</h3>
+                <div>
+                    <b>ID: {{ object.pk }}</b>
+                    {{ form.author|as_crispy_field }}
+                    {{ form.title|as_crispy_field }}
+                    {{ form.publish|as_crispy_field }}
+                    <input type="submit" name="save_continue" class="btn btn-success btn-sm me-1"
+                        value="Save &amp; Next" />
+                    <input type="submit" name="save_add" class="btn btn-outline-success btn-sm me-1" value="Save" />
+                    <button name="reset" class="btn btn-outline-warning btn-sm me-1" value="Reset">Reset</button>
+                </div>
+
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card p-3 mt-3">
+
+            <div class="col-md-10 mb-0">
+                <h3>Info</h3>
+                <b>object_list:</b> {{ object_list }}
+                <br>
+                <b>prev_id:</b> {{ previous_object_id }}
+                <br>
+                <b>current_id:</b> {{ current_object_id }}
+                <br>
+                <b>next_id:</b> {{ next_object_id }}
+                <br><br><br>
+                <h3>Notes</h3>
+                <li>add filter</li>
+                <li>modify next_id, prev_id, and save_continue to include filter options</li>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

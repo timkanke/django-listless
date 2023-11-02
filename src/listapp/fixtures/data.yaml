@@ -1,0 +1,30 @@
+- model: listapp.item
+  pk: 1
+  fields:
+    author: Ellie
+    title: Snack Report
+    publish: True
+- model: listapp.item
+  pk: 2
+  fields:
+    author: Ezzie
+    title: Back from the Vet
+    publish: False
+- model: listapp.item
+  pk: 3
+  fields:
+    author: Pounce
+    title: Bird Watching
+    publish: True
+- model: listapp.item
+  pk: 4
+  fields:
+    author: Ezzie
+    title: New Cardboard Scratcher
+    publish: False
+- model: listapp.item
+  pk: 5
+  fields:
+    author: Pounce
+    title: Field Mice Spotted
+    publish: True
