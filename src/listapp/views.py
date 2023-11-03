@@ -4,6 +4,9 @@ from django.urls import reverse
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, UpdateView
 
+from django_filters import FilterSet
+from django_filters.views import FilterView
+
 import pickle
 from base64 import b64encode, b64decode
 
@@ -16,21 +19,32 @@ class Index(TemplateView):
     template_name = "listapp/index.html"
 
 
-class SimpleListView(ListView):
+class ItemFilter(FilterSet):
+
+    class Meta:
+        model = Item
+        fields = {'author': ['contains'],
+                  'publish': ['exact']
+                  }
+
+
+class SimpleListView(FilterView):
     model = Item
     context_object_name = 'item_list'
     template_name = "listapp/simple_list_view.html"
 
-    def get_queryset(self):
-        # Session key
-        key = 'my_qs'
+    filterset_class = ItemFilter
 
-        qs = Item.objects.filter(author__icontains='Ezzie')
+    # def get_queryset(self):
+        # Session key
+        # key = 'my_qs'
+
+        # qs = Item.objects.filter(author__icontains='Ezzie')
     
         # Django wants datatypes to be JSON serializable. Byte objects need to be encoded/decoded 
-        self.request.session[key] = b64encode(pickle.dumps(qs.query)).decode('ascii')
+        # self.request.session[key] = b64encode(pickle.dumps(qs.query)).decode('ascii')
 
-        return qs
+        # return qs
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get the context

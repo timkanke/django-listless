@@ -8,9 +8,19 @@
 {% block content %}
 <h1>List View</h1>
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-4">
 
         <div class="card p-3 mt-1">
+            <h3>Filters</h3>
+            {% if filter %}
+            <form action="" method="get" class="form form-inline">
+                {% bootstrap_form filter.form layout='inline'|crispy %}
+                {% bootstrap_button 'Filter' button_type="submit" button_class="btn-primary btn-sm" %}
+                {% bootstrap_button 'Reset' button_type="reset" button_class="btn-outline-primary btn-sm" %}
+            </form>
+            {% endif %}
+
+            {% comment %}
             <h3>Filters</h3>
             <form method="GET" action=".">
                 <div class="mb-3">
@@ -27,6 +37,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            {% endcomment %}
         </div>
     </div>
     <div class="col-md-6">
