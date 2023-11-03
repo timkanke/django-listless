@@ -100,8 +100,15 @@
                     {{ form.author|as_crispy_field }}
                     {{ form.title|as_crispy_field }}
                     {{ form.publish|as_crispy_field }}
+
+                    {% if next_object_id %}
                     <input type="submit" name="save_continue" class="btn btn-success btn-sm me-1"
                         value="Save &amp; Next" />
+                    {% else %}
+                    <input type="submit" name="save_continue" class="btn btn-success btn-sm me-1"
+                        value="Save &amp; Next" disabled />
+                    {% endif %}
+
                     <input type="submit" name="save_add" class="btn btn-outline-success btn-sm me-1" value="Save" />
                     <button name="reset" class="btn btn-outline-warning btn-sm me-1" value="Reset">Reset</button>
                 </div>
