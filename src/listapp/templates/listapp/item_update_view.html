@@ -7,45 +7,6 @@
 <div class="container-fluid p-2">
 
     <div class="row">
-        {% comment %}
-        <div class="col-md-4 mb-0">
-            <div class="card p-3 mt-3">
-                <h3>Filter</h3>
-                <h4>under construction</h4>
-
-                <form method="GET" action=".">
-                    <div class="mb-3">
-                        <label for="author" class="form-label">Author</label>
-                        <input type="icontains" class="form-control" id="author" name="author_contains"
-                            aria-label="author">
-                    </div>
-                    <div class="mb-3">
-                        <label for="publish" class="form-label">Publish</label>
-                        <select class="form-select" name="publish" aria-label="publish">
-                            <option selected>---</option>
-                            <option value="1">True</option>
-                            <option value="2">False</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-
-
-                {% if filter %}
-                <form action="" method="get" class="form form-inline">
-                    {% bootstrap_form filter.form layout='inline'|crispy %}
-                    {% bootstrap_button 'Filter' button_type="submit" button_class="btn-primary btn-sm" %}
-                    {% bootstrap_button 'Reset' button_type="reset" button_class="btn-outline-primary btn-sm" %}
-                </form>
-                {% endif %}
-
-                <div class="row pt-3">
-                    <a href="{% clean_url %}"><button class="btn btn-warning btn-sm">Clear Filters</button></a>
-                </div>
-
-            </div>
-        </div>
-        {% endcomment %}
         <div class="col-md-4 mb-0">
             <div class="card p-3 mt-3">
                 <h3>Navigation</h3>
@@ -164,8 +125,7 @@
                 <b>next_id:</b> {{ next_object_id }}
                 <br><br><br>
                 <h3>Notes</h3>
-                <li>add filter</li>
-                <li>modify next_id, prev_id, and save_continue to include filter options</li>
+                <li>modify save_continue to disable if no next</li>
             </div>
         </div>
     </div>

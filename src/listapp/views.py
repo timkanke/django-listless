@@ -27,6 +27,7 @@ class SimpleListView(ListView):
 
         qs = Item.objects.filter(author__icontains='Ezzie')
     
+        # Django wants datatypes to be JSON serializable. Byte objects need to be encoded/decoded 
         self.request.session[key] = b64encode(pickle.dumps(qs.query)).decode('ascii')
 
         return qs
@@ -49,7 +50,7 @@ class ItemUpdateView(UpdateView):
 
     # Form
     def get_success_url(self):
-        return reverse('listapp:_detail', kwargs={'pk': self.object.pk})
+        return reverse('listapp:itemupdateview', kwargs={'pk': self.object.pk})
 
     # Form
     def post(self, request, *args, **kwargs):
@@ -72,9 +73,9 @@ class ItemUpdateView(UpdateView):
                               .order_by('id')
                               .only('id')
                               .first())
-                        return redirect('listapp:_detail', pk=pk.id)
+                        return redirect('listapp:itemupdateview', pk=pk.id)
                     elif 'reset' in request.POST:
-                        return HttpResponseRedirect(reverse('listapp:_detail', kwargs={'pk': self.object.pk}))
+                        return HttpResponseRedirect(reverse('listapp:itemupdateview', kwargs={'pk': self.object.pk}))
             else:
                 return self.form_invalid(form)
 
@@ -110,6 +111,7 @@ class ItemUpdateView(UpdateView):
         # Session key
         key = 'my_qs'
 
+        # Django wants datatypes to be JSON serializable. Byte objects need to be encoded/decoded 
         query = pickle.loads(b64decode(self.request.session[key]))
         qs = Item.objects.all()
         qs.query = query 
