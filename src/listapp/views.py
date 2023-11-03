@@ -11,7 +11,7 @@ import pickle
 from base64 import b64encode, b64decode
 
 from .models import Item
-from .forms import ItemUpdateForm
+from .forms import ItemFilterForm, ItemUpdateForm
 from .tables import ItemList
 
 
@@ -28,31 +28,29 @@ class ItemFilter(FilterSet):
                   }
 
 
-class SimpleListView(FilterView):
+class SimpleListView(ListView):
     model = Item
     context_object_name = 'item_list'
     template_name = "listapp/simple_list_view.html"
 
-    filterset_class = ItemFilter
+    queryset = Item.objects.all()
+    # filterset_class = ItemFilter
 
-    # def get_queryset(self):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = ItemFilter(self.request.GET, queryset=queryset)
+        
         # Session key
-        # key = 'my_qs'
-
-        # qs = Item.objects.filter(author__icontains='Ezzie')
+        key = 'my_qs'
     
         # Django wants datatypes to be JSON serializable. Byte objects need to be encoded/decoded 
-        # self.request.session[key] = b64encode(pickle.dumps(qs.query)).decode('ascii')
+        self.request.session[key] = b64encode(pickle.dumps(self.filterset.qs.query)).decode('ascii')
 
-        # return qs
+        return self.filterset.qs
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get the context
         context = super(SimpleListView, self).get_context_data(**kwargs)
-        # Create any data and add it to the context
-        # context['some_data'] = 'This is just some data'
-        qs = self.get_queryset()
-        context['qs'] = qs
+        context['form'] = self.filterset.form
         return context
 
 
