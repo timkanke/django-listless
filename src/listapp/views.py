@@ -30,11 +30,9 @@ class ItemFilter(FilterSet):
 
 class SimpleListView(ListView):
     model = Item
+    queryset = Item.objects.all()
     context_object_name = 'item_list'
     template_name = "listapp/simple_list_view.html"
-
-    queryset = Item.objects.all()
-    # filterset_class = ItemFilter
 
     def get_queryset(self):
         queryset = super().get_queryset()
