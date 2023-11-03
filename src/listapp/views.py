@@ -4,28 +4,19 @@ from django.urls import reverse
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, UpdateView
 
-from django_filters import FilterSet
 from django_filters.views import FilterView
 
 import pickle
 from base64 import b64encode, b64decode
 
 from .models import Item
+from .filters import ItemFilter
 from .forms import ItemFilterForm, ItemUpdateForm
 from .tables import ItemList
 
 
 class Index(TemplateView):
     template_name = "listapp/index.html"
-
-
-class ItemFilter(FilterSet):
-
-    class Meta:
-        model = Item
-        fields = {'author': ['contains'],
-                  'publish': ['exact']
-                  }
 
 
 class SimpleListView(ListView):
