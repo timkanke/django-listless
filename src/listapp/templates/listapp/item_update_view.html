@@ -7,13 +7,13 @@
 <div class="container-fluid p-2">
 
     <div class="row">
-        <div class="col-md-4 mb-0">
+        <div class="col-md-12 mb-0">
             <div class="card p-3 mt-3">
                 <h3>Navigation</h3>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start">
                     {% if previous_object_id %}
                     <a href="{% url 'listapp:itemupdateview' previous_object_id %}">
-                        <button class="btn btn-outline-info btn-sm">
+                        <button class="btn btn-info btn-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-chevron-left" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
@@ -33,7 +33,7 @@
 
                     {% if next_object_id %}
                     <a href="{% url 'listapp:itemupdateview' next_object_id %}">
-                        <button class="btn btn-outline-info btn-sm">
+                        <button class="btn btn-info btn-sm">
                             Next Item
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-chevron-right" viewBox="0 0 16 16">
@@ -52,6 +52,14 @@
                     </button>
                     {% endif %}
 
+                    <button type="button" class="btn btn-warning btn-sm">
+                        <a class="nav-link" href="{% url 'listapp:simplelistview' %}">List View with No Filters</a>
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm">
+                        <a class="nav-link" href="{% url 'listapp:simplelistview' %}?{{ query_filter_url }}">
+                            List View with Filters
+                        </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -130,6 +138,13 @@
                 <b>current_id:</b> {{ current_object_id }}
                 <br>
                 <b>next_id:</b> {{ next_object_id }}
+                <br>
+                <b>query_filter_url:</b> {{ query_filter_url }}
+                <br>
+                <b>object_list.query:</b> {{ object_list.query }}
+                <br>
+                <b>previous url:</b> {{ request.META.HTTP_REFERRER }}
+                <a href="{{ request.META.HTTP_REFERER }}">Return</a>
                 <br><br><br>
                 <h3>Notes</h3>
                 <li>add "to item list" button that recalls filterset</li>

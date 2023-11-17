@@ -1,6 +1,7 @@
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect, QueryDict
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.http import urlencode
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, UpdateView
 
@@ -120,6 +121,17 @@ class ItemUpdateView(UpdateView):
         object_list = qs.order_by('id')
         return object_list
 
+    def query_filter_url(self):
+        object_list = self.get_object_list()
+        
+        # query_filter_url = self.kwargs['parameter']
+        # query_filter_url = QueryDict(mutable=True)  # returns empty dict
+        # query_filter_url = dict(self.request.GET)  # returns empty dict, expected since it would be getting url
+        
+        query_filter_url = urlencode({'publish': 'True'})  # Desired, however not hardcoded
+        
+        return query_filter_url
+
     # Create context
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -128,11 +140,13 @@ class ItemUpdateView(UpdateView):
         next_object_id = self.get_next_id(current_object_id)
         previous_object_id = self.get_previous_id(current_object_id)
         object_list = self.get_object_list()
+        query_filter_url = self.query_filter_url()
 
         context['current_object_id'] = current_object_id
         context['next_object_id'] = next_object_id
         context['previous_object_id'] = previous_object_id
         context['object_list'] = object_list
+        context['query_filter_url'] = query_filter_url
 
         try:  # If we have pk, create object with that pk
             pk = self.kwargs['pk']
