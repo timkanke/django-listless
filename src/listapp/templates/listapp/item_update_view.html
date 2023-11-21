@@ -109,6 +109,17 @@
                     {{ form.title|as_crispy_field }}
                     {{ form.publish|as_crispy_field }}
 
+                    {% if object.file %}
+                    <b>File:</b> {{ object.file.title }}
+                    <br>
+                    <img src="{{ object.file.file.url }}" alt="image" style="width:100%">
+                    <br>
+                    <a href="{{ object.file.file.url }}">file</a>
+                    <br>
+                    {% endif %}
+
+
+                    <br>
                     {% if next_object_id %}
                     <input type="submit" name="save_continue" class="btn btn-success btn-sm me-1"
                         value="Save &amp; Next" />

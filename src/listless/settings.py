@@ -131,8 +131,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap5.html"
+DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap5.html'
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
