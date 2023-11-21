@@ -52,6 +52,11 @@ class SimpleListView(ListView):
         # Session key
         key = 'my_qs'
 
+        key_url = 'key_url'
+
+        # url for returning with applied filters
+        self.request.session[key_url] = self.request.GET
+
         # Django wants datatypes to be JSON serializable. Byte objects need to be encoded/decoded
         self.request.session[key] = b64encode(pickle.dumps(self.filterset.qs.query)).decode('ascii')
 
@@ -150,17 +155,20 @@ class ItemUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Get query URL to return to list view
+        key_url = 'key_url'
+        query_params = self.request.session[key_url]
+
         current_object_id = self.object.id
         next_object_id = self.get_next_id(current_object_id)
         previous_object_id = self.get_previous_id(current_object_id)
         object_list = self.get_object_list()
-        query_filter_url = self.query_filter_url()
 
         context['current_object_id'] = current_object_id
         context['next_object_id'] = next_object_id
         context['previous_object_id'] = previous_object_id
         context['object_list'] = object_list
-        context['query_filter_url'] = query_filter_url
+        context['query_params'] = urlencode(query_params)
 
         try:  # If we have pk, create object with that pk
             pk = self.kwargs['pk']

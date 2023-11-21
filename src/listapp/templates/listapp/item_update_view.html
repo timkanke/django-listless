@@ -56,8 +56,8 @@
                         <a class="nav-link" href="{% url 'listapp:simplelistview' %}">List View with No Filters</a>
                     </button>
                     <button type="button" class="btn btn-success btn-sm">
-                        <a class="nav-link" href="{% url 'listapp:simplelistview' %}?{{ query_filter_url }}">
-                            List View with Filters
+                        <a class="nav-link" href="{% url 'listapp:simplelistview' %}?{{ query_params }}">
+                            List View with Current Filters
                         </a>
                     </button>
                 </div>
