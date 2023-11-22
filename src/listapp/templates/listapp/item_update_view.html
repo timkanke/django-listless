@@ -111,10 +111,15 @@
 
                     {% if object.file %}
 
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Open File: {{ object.file.title }}
-                    </button>
+                    <!-- Stretched link trigger modal -->
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{ object.file.file.url }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                {{ object.file.title }}
+                            </a>
+                        </div>
+                    </div>
 
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -179,9 +184,6 @@
                 <br>
                 <b>previous url:</b> {{ request.META.HTTP_REFERRER }}
                 <a href="{{ request.META.HTTP_REFERER }}">Return</a>
-                <br><br><br>
-                <h3>Notes</h3>
-                <li>add "to item list" button that recalls filterset</li>
             </div>
         </div>
     </div>
