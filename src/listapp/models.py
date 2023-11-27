@@ -1,22 +1,18 @@
 from django.db import models
 
 
+class File(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=20)
+    file = models.FileField(upload_to='files')
+
+
 class Item(models.Model):
     id = models.AutoField(primary_key=True)
     author = models.CharField(max_length=255, blank=True)
     title = models.CharField(max_length=255, blank=True)
     publish = models.BooleanField(null=True)
-    file = models.ForeignKey(
-        'File',
-        on_delete=models.CASCADE,
-        null=True,
-    )
-
-
-class File(models.Model):
-    id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=20)
-    file = models.FileField(upload_to='files')
+    files = models.ManyToManyField(File)
 
 
 class Image(models.Model):
