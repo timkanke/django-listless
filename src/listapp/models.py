@@ -1,10 +1,26 @@
 from django.db import models
 
+import pathlib
+
 
 class File(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=20)
     file = models.FileField(upload_to='files')
+
+    def extension(self):
+        extension = pathlib.Path(self.file.file).suffix
+        if extension == 'jpg':
+            return 'jpg'
+        if extension == 'jpeg':
+            return 'jpeg'
+        if extension == 'png':
+            return 'png'
+        if extension == 'pdf':
+            return 'pdf'
+        if extension == 'docx':
+            return 'docx'
+        return 'other'
 
 
 class Item(models.Model):

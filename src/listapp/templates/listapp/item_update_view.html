@@ -115,11 +115,15 @@
                     {% for file in item.files.all %}
                     <!-- Stretched link trigger modal -->
                     <div class="card" style="width: 18rem;">
+                        {% if item.file.extension is jpg %}
                         <img src="{{ file.file.url }}" class="card-img-top" alt="...">
+                        {% endif %}
                         <div class="card-body">
                             <a href="#" class="stretched-link" data-bs-toggle="modal"
                                 data-bs-target="#Modal{{ file.id }}">
                                 {{ file.title }}
+                                <br>
+                                {{ file.file }}
                             </a>
                         </div>
                     </div>
