@@ -178,3 +178,11 @@ class ItemUpdateView(UpdateView):
         except Exception as e:
             pass  # No pk, so no detail
         return context
+
+
+def search_item_author(request):
+    search_text = request.POST.get('search')
+    # look up all items that contain the text
+    results = Item.objects.filter(author__icontains=search_text)
+    context = {'results': results}
+    return render(request, 'listapp/partials/search-results.html', context)

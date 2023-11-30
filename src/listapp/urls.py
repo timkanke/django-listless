@@ -20,3 +20,10 @@ urlpatterns = [
     path('simplelistview/', views.SimpleListView.as_view(), name='simplelistview'),
     path('itemupdateview/<int:pk>/', views.ItemUpdateView.as_view(), name='itemupdateview'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+htmx_urlpatterns = [
+    path('search-item-author/', views.search_item_author, name='search-item-author'),
+]
+
+urlpatterns += htmx_urlpatterns

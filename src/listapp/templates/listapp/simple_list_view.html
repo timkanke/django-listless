@@ -40,6 +40,7 @@
                 {% endcomment %}
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="card p-3 mt-1">
                 <h3>Item List</h3>
@@ -65,16 +66,27 @@
                 {% endif %}
             </div>
         </div>
-
+        <div>
+            <br><br>
+            <br><br>
+        </div>
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="card p-3 mt-3">
 
-                    <div class="col-md-10 mb-0">
-                        <h3>Info</h3>
+                    <div class="col-md-12 mb-0">
+                        <h3>Live Search Results</h3>
+                        <div class="d-flex justify-content-start mb-4">
+                            <form>
+                                {% csrf_token %}
+                                <input type="text" hx-post="{% url 'listapp:search-item-author' %}" hx-target='#results'
+                                    hx-trigger="keyup changed delay:500ms" name="search" class="form-control-sm mr-2"
+                                    placeholder="Search authors..." />
 
-                        <br><br><br>
-                        <h3>Notes</h3>
+                            </form>
+                        </div>
+                        <div id="results"></div>
+
 
                     </div>
                 </div>
