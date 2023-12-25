@@ -79,7 +79,7 @@
                         <div class="d-flex justify-content-start mb-4">
                             <form>
                                 {% csrf_token %}
-                                <input type="text" hx-post="{% url 'listapp:search-item-author' %}" hx-target='#results'
+                                <input type="text" hx-get="{% url 'listapp:search-item-author' %}" hx-target='#results'
                                     hx-trigger="keyup changed delay:500ms" name="search" class="form-control-sm mr-2"
                                     placeholder="Search authors..." />
 
