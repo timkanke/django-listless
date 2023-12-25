@@ -186,3 +186,11 @@ def search_item_author(request):
     results = Item.objects.filter(author__icontains=search_text)
     context = {'results': results}
     return render(request, 'listapp/partials/search-results.html', context)
+
+
+def search_item_title(request):
+    search_text = request.GET.get('search')
+    # look up all items that contain the text
+    results = Item.objects.filter(title__icontains=search_text)
+    context = {'results': results}
+    return render(request, 'listapp/partials/search-results.html', context)

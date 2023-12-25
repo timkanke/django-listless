@@ -24,6 +24,7 @@ urlpatterns = [
 
 htmx_urlpatterns = [
     path('search-item-author/', views.search_item_author, name='search-item-author'),
+    path('search-item-title/', views.search_item_title, name='search-item-title'),
 ]
 
 urlpatterns += htmx_urlpatterns

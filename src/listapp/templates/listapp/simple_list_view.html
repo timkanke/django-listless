@@ -71,10 +71,10 @@
             <br><br>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <div class="card p-3 mt-3">
 
-                    <div class="col-md-12 mb-0">
+                    <div class="col-md-6 mb-0">
                         <h3>Live Search Results</h3>
                         <div class="d-flex justify-content-start mb-4">
                             <form>
@@ -82,6 +82,9 @@
                                 <input type="text" hx-get="{% url 'listapp:search-item-author' %}" hx-target='#results'
                                     hx-trigger="keyup changed delay:500ms" name="search" class="form-control-sm mr-2"
                                     placeholder="Search authors..." />
+                                <input type="text" hx-get="{% url 'listapp:search-item-title' %}" hx-target='#results'
+                                    hx-trigger="keyup changed delay:500ms" name="search" class="form-control-sm mr-2"
+                                    placeholder="Search titles..." />
 
                             </form>
                         </div>
