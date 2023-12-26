@@ -1,0 +1,5 @@
+/* TABLE STYLES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.table-clickable tbody tr {
+    cursor: pointer;
+}
