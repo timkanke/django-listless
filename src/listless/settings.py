@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'listapp.apps.ListappConfig',
+    'textblockapp',
     'django_bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
