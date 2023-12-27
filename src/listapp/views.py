@@ -1,23 +1,104 @@
-from django.http import HttpResponseForbidden, HttpResponseRedirect, QueryDict
+from django.core.exceptions import BadRequest
+from django.http import HttpRequest, HttpResponseForbidden, HttpResponseRedirect, QueryDict
+from django.db.models import OuterRef, Subquery, Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import urlencode
 from django.views.generic.base import TemplateView
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DetailView, ListView, View, UpdateView
+from django.core.paginator import Paginator
 
 from django_filters.views import FilterView
 
 import pickle
 from base64 import b64encode, b64decode
+from urlobject import URLObject
 
 from .models import Image, Item
 from .filters import ItemFilter
 from .forms import ItemFilterForm, ImageUploadForm, ItemUpdateForm
 from .tables import ItemList
+from .utils import getlines, filter_group, combine, FilterSet, PaginationLinks, find_object
+
+
+FILTER_TEMPLATES = {
+    'q': lambda value: Q(title__icontains=value) | Q(author__icontains=value),
+    **filter_group('title'),
+}
+
+FILTER_LABELS = {
+    'Author': 'author',
+    'Title': 'title',
+    'Publish': 'publish',
+}
+
+PAGE_PARAM_NAME = 'page'
+
+PAGE_SIZE = 10
+
+
+def append_filter(request: HttpRequest) -> HttpResponseRedirect:
+    url = URLObject(request.build_absolute_uri())
+    filter_param = request.POST['filter_name'] + request.POST['filter_operation']
+    filter_value = request.POST['filter_value']
+    new_url = url.add_query_param(filter_param, filter_value)
+    return HttpResponseRedirect(new_url)
 
 
 class Index(TemplateView):
     template_name = 'listapp/index.html'
+
+
+class FancyList(ListView):
+    model = Item
+    # queryset = Item.objects.all()
+    template_name = 'listapp/fancy_list.html'
+
+    def post(self, _request):
+        if 'filter_name' in self.request.POST:
+            return append_filter(self.request)
+
+        # else:
+        # action = self.request.POST['action']
+        # item_ids = self.request.POST.getlist('item_id')
+
+    # if action == 'edit':
+    #     # bulk editing
+    #     qs = [('item_id', item_id) for item_id in item_ids] + [
+    #         ('redirect', self.request.POST.get('redirect', reverse('fancylist')))
+    #     ]
+    #     return HttpResponseRedirect(reverse('bulk_edit_books') + '?' + urlencode(qs))
+    # else:
+    #     raise BadRequest
+
+    def get(self, _request):
+        itemlist = Item.objects.all()
+
+        filters = FilterSet()
+
+        for filter_query in filters.build(FILTER_TEMPLATES, self.request.GET):
+            itemlist = itemlist.filter(filter_query)
+
+        itemlist = itemlist.distinct().order_by('id')
+
+        paginator = Paginator(itemlist, PAGE_SIZE)
+        page = paginator.get_page(self.request.GET.get(PAGE_PARAM_NAME, 1))
+
+        url = URLObject(self.request.build_absolute_uri())
+
+        return render(
+            self.request,
+            'listapp/fancy_list.html',
+            context={
+                'url': url,
+                # 'categories': CATEGORIES.keys(),
+                'filter_names': FILTER_LABELS,
+                'page_obj': page,
+                'filters': filters,
+                'page_links': PaginationLinks(url, page, PAGE_PARAM_NAME),
+                # 'isbn_form': SingleISBNForm(),
+            },
+        )
 
 
 class ImageListView(ListView):

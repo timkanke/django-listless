@@ -15,6 +15,7 @@ app_name = 'listapp'
 # ]
 urlpatterns = [
     path('', views.Index.as_view(), name='index'),
+    path('fancylist/', views.FancyList.as_view(), name='fancylist'),
     path('imageupload/', views.ImageUpload.as_view(), name='imageupload'),
     path('imagelistview/', views.ImageListView.as_view(), name='imagelistview'),
     path('simplelistview/', views.SimpleListView.as_view(), name='simplelistview'),

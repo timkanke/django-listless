@@ -1,0 +1,80 @@
+{% extends "listapp/base.html" %}
+{% load crispy_forms_tags %}
+
+{% load redirect_tag %}
+{% load url_query %}
+
+{% load pagination %}
+
+{% block content %}
+
+
+<div class="row bg-primary-subtle">
+    <h1>Fancy List</h1>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card p-3 mt-1">
+            <h3>Filters</h3>
+
+            <form method="post" action="" class="search-form">
+                {% csrf_token %}
+                <select name="filter_name">
+                    {% for filter_label, filter_name in filter_names.items %}
+                    <option value="{{ filter_name }}">{{ filter_label }}</option>
+                    {% endfor %}
+                </select>
+                <select name="filter_operation">
+                    <option value="~">matches</option>
+                    <option value="">is</option>
+                    <option value="^">begins with</option>
+                    <option value="$">ends with</option>
+                </select>
+                <input type="text" name="filter_value" />
+                <button>Add filter</button>
+            </form>
+            {% include 'listapp/partials/item_filters.html' %}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card p-3 mt-1">
+            <h3>List</h3>
+            {% redirect_tag %}
+            {% if page_obj %}
+            <table class="table table-hover table-clickable">
+                <tr>
+                    <td><b>ID</b></td>
+                    <td><b>Author</b></td>
+                    <td><b>Title</b></td>
+                    <td><b>Publish</b></td>
+                </tr>
+                {% for items in page_obj %}
+                <tr data-href="{% url 'listapp:itemupdateview' items.id %}">
+                    <td>{{ items.id }}</td>
+                    <td>{{ items.author }}</td>
+                    <td>{{ items.title }}</td>
+                    <td>{{ items.publish }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p>There are no items.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const tableRows = document.querySelectorAll(".table-clickable tbody tr");
+
+    for (const tableRow of tableRows) {
+        tableRow.addEventListener("click", function () {
+            window.open(this.dataset.href, "_self");
+        });
+    }
+</script>
+
+{% endblock %}
