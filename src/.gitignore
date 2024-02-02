@@ -3,3 +3,7 @@
 static/*
 __pycache__
 *.sqlite3
+
+package-lock.json
+yarn.lock
+node_modules

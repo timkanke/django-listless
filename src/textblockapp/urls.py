@@ -10,9 +10,10 @@ app_name = 'textblockapp'
 
 urlpatterns = [
     path('', views.Index.as_view(), name='index'),
+    path('diffview/<int:pk>/', views.DiffView.as_view(), name='diffview'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-# htmx_urlpatterns = []
+htmx_urlpatterns = []
 
-# urlpatterns += htmx_urlpatterns
+urlpatterns += htmx_urlpatterns
