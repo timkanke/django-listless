@@ -1,0 +1,15 @@
+<table class="table table-striped w-100 d-block d-md-table">
+    <thead>
+        <th>Photo</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Breed</th>
+        <th>Color</th>
+    </thead>
+    <tbody>
+        {% for cat in cats %}
+        {% include 'listapp/partials/cat_row.html' %}
+        {% endfor %}
+    </tbody>
+</table>

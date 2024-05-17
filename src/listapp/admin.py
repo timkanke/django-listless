@@ -1,6 +1,10 @@
 from django.contrib import admin
 
-from .models import File, Image, Item
+from .models import Cat, File, Image, Item
+
+
+class catAdmin(admin.ModelAdmin):
+    list_display = ['name']
 
 
 class fileAdmin(admin.ModelAdmin):
@@ -15,6 +19,7 @@ class itemAdmin(admin.ModelAdmin):
     list_display = ['id', 'author', 'title', 'publish']
 
 
+admin.site.register(Cat, catAdmin)
 admin.site.register(File, fileAdmin)
 admin.site.register(Image, imageAdmin)
 admin.site.register(Item, itemAdmin)

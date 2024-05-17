@@ -1,0 +1,17 @@
+<tr>
+    <td>{{ cat.photo.name }} <img src="{{ cat.photo }}" alt="image" style="width:100%"></td>
+    <td>{{ cat.name }}</td>
+    <td>{{ cat.get_gender_display }}</td>
+    <td>{{ cat.age }}</td>
+    <td>{{ cat.breed }}</td>
+    <td>{{ cat.color }}</td>
+    <td><button class='btn' hx-get="{% url 'listapp:edit_cat' cat.pk %}" hx-target="closest tr" hx-swap="outerHTML">
+            <svg class="bi bi-pencil" width="32" height="32">
+                <use xlink:href="#pencil">
+            </svg></button></td>
+    <td><button class='btn' hx-confirm='Are you sure?' hx-target="closest tr" hx-swap="outerHTML swap:1s"
+            hx-delete="{% url 'listapp:delete_cat' cat.pk %}">
+            <svg class="bi bi-trash3" width="32" height="32">
+                <use xlink:href="#trash3">
+            </svg></button></td>
+</tr>

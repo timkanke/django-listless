@@ -1,5 +1,5 @@
 from django.core.exceptions import BadRequest
-from django.http import HttpRequest, HttpResponseForbidden, HttpResponseRedirect, QueryDict
+from django.http import HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, QueryDict
 from django.db.models import OuterRef, Subquery, Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -14,12 +14,14 @@ import pickle
 from base64 import b64encode, b64decode
 from urlobject import URLObject
 
-from .models import Image, Item
+from .models import Cat, Image, Item
 from .filters import ItemFilter
 from .forms import ItemFilterForm, ImageUploadForm, ItemUpdateForm
 from .tables import ItemList
 from .utils import getlines, filter_group, combine, FilterSet, PaginationLinks, find_object
 
+from django import forms
+from django.forms import modelform_factory
 
 FILTER_TEMPLATES = {
     'q': lambda value: Q(title__icontains=value) | Q(author__icontains=value),
@@ -47,6 +49,78 @@ def append_filter(request: HttpRequest) -> HttpResponseRedirect:
 
 class Index(TemplateView):
     template_name = 'listapp/index.html'
+
+
+class CrudTable(ListView):
+    model = Cat
+    template_name = 'listapp/crudtable.html'
+
+
+class CatForm(forms.ModelForm):
+    class Meta:
+        model = Cat
+        exclude = []
+
+
+def get_cat_list(request):
+    context = {}
+    context['cats'] = Cat.objects.all()
+    return render(request, 'listapp/partials/cat_list.html', context)
+
+
+def add_cat(request):
+    context = {'form': CatForm()}
+    return render(request, 'listapp/partials/add_cat.html', context)
+
+
+def add_cat_submit(request):
+    context = {}
+    form = CatForm(request.POST, request.FILES)
+    context['form'] = form
+    if form.is_valid():
+        context['cat'] = form.save()
+    else:
+        return render(request, 'listapp/partials/add_cat.html', context)
+    return render(request, 'listapp/partials/cat_row.html', context)
+
+
+def add_cat_cancel(request):
+    return HttpResponse()
+
+
+def delete_cat(request, cat_pk):
+    cat = Cat.objects.get(pk=cat_pk)
+    cat.delete()
+    return HttpResponse()
+
+
+def edit_cat(request, cat_pk):
+    cat = Cat.objects.get(pk=cat_pk)
+    context = {}
+    context['cat'] = cat
+    context['form'] = CatForm(
+        initial={
+            'name': cat.name,
+            'gender': cat.gender,
+            'age': cat.age,
+            'breed': cat.breed,
+            'color': cat.color,
+        }
+    )
+    return render(request, 'listapp/partials/edit_cat.html', context)
+
+
+def edit_cat_submit(request, cat_pk):
+    context = {}
+    cat = Cat.objects.get(pk=cat_pk)
+    context['cat'] = cat
+    if request.method == 'POST':
+        form = CatForm(request.POST, instance=cat)
+        if form.is_valid():
+            form.save()
+        else:
+            return render(request, 'listapp/partials/edit_cat.html', context)
+    return render(request, 'listapp/partials/cat_row.html', context)
 
 
 class FancyList(ListView):
@@ -266,7 +340,7 @@ def search_item_author(request):
     # look up all items that contain the text
     results = Item.objects.filter(author__icontains=search_text)
     context = {'results': results}
-    return render(request, 'listapp/partials/search-results.html', context)
+    return render(request, 'listapp/partialss/search-results.html', context)
 
 
 def search_item_title(request):
@@ -274,4 +348,4 @@ def search_item_title(request):
     # look up all items that contain the text
     results = Item.objects.filter(title__icontains=search_text)
     context = {'results': results}
-    return render(request, 'listapp/partials/search-results.html', context)
+    return render(request, 'listapp/partialss/search-results.html', context)

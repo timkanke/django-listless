@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 import pathlib
 
@@ -34,3 +35,17 @@ class Item(models.Model):
 class Image(models.Model):
     title = models.CharField(max_length=20)
     photo = models.ImageField(upload_to='pics')
+
+
+class Cat(models.Model):
+    class Gender(models.TextChoices):
+        FEMALE = 'F', _('Female')
+        MALE = 'M', _('Male')
+        UNKNOWN = 'U', _('Unknown')
+
+    name = models.CharField(max_length=100, blank=True, null=True)
+    gender = models.CharField(max_length=50, choices=Gender.choices, blank=False, default='U')
+    age = models.DecimalField(max_digits=7, decimal_places=0, blank=True, null=True)
+    breed = models.CharField(max_length=50, blank=True, null=True)
+    color = models.CharField(max_length=50, blank=True, null=True)
+    photo = models.ImageField(upload_to='cat', blank=True, null=True)
